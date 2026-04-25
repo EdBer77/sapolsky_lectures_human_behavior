@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Сапольски — Биология поведения</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#0e1117;--surface:#161c27;--card:#1d2535;--border:#2a3448;--gold:#e8b45a;--blue:#5a9ee8;--pink:#e85a7a;--green:#5ae8b4;--purple:#b45ae8;--text:#d4dbe8;--muted:#7a8499}
+html,body{width:100%;overflow-x:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;line-height:1.6}
+.hdr{background:linear-gradient(160deg,#0e1117,#161c27);border-bottom:1px solid var(--border);padding:24px 16px 20px;text-align:center}
+.hdr-sup{font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.hdr h1{font-size:clamp(18px,5vw,30px);font-weight:800;color:#fff;line-height:1.2}
+.hdr h1 span{color:var(--gold)}
+.hdr-sub{font-size:11px;color:var(--muted);margin-top:6px}
+.tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--border);background:var(--surface);-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;padding:12px 14px;font-size:12px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;font-weight:500}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.page{display:none;padding:16px;max-width:900px;margin:0 auto}
+.page.active{display:block}
+.search-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;width:100%;color:var(--text);font-size:14px;margin-bottom:14px;outline:none}
+.search-box:focus{border-color:var(--gold)}
+.search-box::placeholder{color:var(--muted)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap}
+.chip.on{background:var(--gold);color:#0e1117;border-color:var(--gold);font-weight:700}
+.lec-card{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden}
+.lec-card-head{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;user-select:none}
+.lec-num{font-size:22px;font-weight:800;min-width:36px;line-height:1}
+.lec-meta{flex:1}
+.lec-tag{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;font-weight:600}
+.lec-title{font-size:14px;font-weight:700;color:#fff;line-height:1.3}
+.lec-arrow{font-size:18px;color:var(--muted);transition:transform .25s;flex-shrink:0}
+.lec-card.open .lec-arrow{transform:rotate(180deg)}
+.lec-body{display:none;padding:0 14px 14px}
+.lec-card.open .lec-body{display:block}
+.idea-box{background:var(--bg);border-left:3px solid var(--gold);padding:10px 12px;border-radius:0 8px 8px 0;margin-bottom:14px;font-size:12px;color:var(--text);line-height:1.5;font-style:italic}
+.sec-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:12px 0 8px;font-weight:600}
+.term-row{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.term-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.term-name{font-size:12px;font-weight:700;margin-bottom:3px}
+.term-def{font-size:12px;color:var(--text);opacity:.85;line-height:1.4}
+.term-ex{font-size:11px;color:var(--muted);font-style:italic;margin-top:3px}
+.sum-box{background:rgba(90,158,232,.08);border:1px solid rgba(90,158,232,.2);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px;line-height:1.5}
+.sum-box h4{font-size:10px;color:var(--blue);margin-bottom:5px;text-transform:uppercase;letter-spacing:1px}
+.sum-gold{background:rgba(232,180,90,.07);border-color:rgba(232,180,90,.2)}
+.sum-gold h4{color:var(--gold)}
+.outcomes{background:rgba(90,232,180,.06);border:1px solid rgba(90,232,180,.2);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px}
+.outcomes h4{font-size:10px;color:var(--green);margin-bottom:5px;text-transform:uppercase;letter-spacing:1px}
+.outcomes ul{padding-left:16px}
+.outcomes li{margin-bottom:3px;line-height:1.4}
+.src-box{background:rgba(180,90,232,.06);border:1px solid rgba(180,90,232,.2);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px}
+.src-box h4{font-size:10px;color:var(--purple);margin-bottom:5px;text-transform:uppercase;letter-spacing:1px}
+.src-box a{color:var(--purple);text-decoration:none;display:block;margin-bottom:4px;word-break:break-word;line-height:1.4}
+.yt-btn{display:flex;align-items:center;gap:8px;background:#cc0000;color:#fff;border-radius:8px;padding:10px 14px;text-decoration:none;font-size:12px;font-weight:700;margin-bottom:12px;width:fit-content}
+.divider{height:1px;background:var(--border);margin:12px 0}
+.alpha-letter{font-size:22px;font-weight:800;color:var(--gold);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.alpha-section{margin-bottom:20px}
+.gloss-item{padding:10px 0;border-bottom:1px solid var(--border)}
+.gloss-item:last-child{border-bottom:none}
+.gloss-term{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px}
+.gloss-def{font-size:12px;color:var(--text);opacity:.85;line-height:1.4}
+.gloss-lec{font-size:10px;color:var(--gold);margin-top:3px}
+.author-photo{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--blue));display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 14px}
+.author-name{font-size:20px;font-weight:800;color:#fff;text-align:center;margin-bottom:4px}
+.author-title{font-size:12px;color:var(--muted);text-align:center;margin-bottom:18px}
+.author-sec{background:var(--card);border-radius:10px;padding:14px;margin-bottom:12px}
+.author-sec h3{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:700}
+.author-sec p,.author-sec li{font-size:13px;line-height:1.6;color:var(--text)}
+.author-sec ul{padding-left:16px}
+.author-sec li{margin-bottom:4px}
+.alink a{display:block;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--blue);text-decoration:none;margin-bottom:8px;font-size:13px;word-break:break-word}
+.quiz-prog{background:var(--border);border-radius:4px;height:4px;margin-bottom:16px}
+.quiz-prog-bar{background:var(--gold);height:4px;border-radius:4px;transition:width .3s}
+.quiz-qnum{font-size:11px;color:var(--muted);margin-bottom:6px}
+.quiz-question{font-size:14px;font-weight:700;color:#fff;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.quiz-opt{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;cursor:pointer;font-size:13px;color:var(--text);transition:all .2s;text-align:left;line-height:1.4;width:100%}
+.quiz-opt.correct{background:rgba(90,232,180,.15);border-color:var(--green);color:var(--green)}
+.quiz-opt.wrong{background:rgba(232,90,122,.12);border-color:var(--pink);color:var(--pink)}
+.quiz-opt.disabled{pointer-events:none}
+.quiz-exp{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:12px;color:var(--text);margin-bottom:14px;display:none;line-height:1.5}
+.quiz-exp.show{display:block}
+.btn{background:var(--gold);color:#0e1117;border:none;border-radius:8px;padding:12px 20px;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-bottom:8px;display:block}
+.btn.sec{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.quiz-score{background:var(--card);border-radius:12px;padding:24px;text-align:center}
+.score-num{font-size:48px;font-weight:800;color:var(--gold);margin:10px 0}
+.score-lbl{font-size:13px;color:var(--muted)}
+.fc-info{background:var(--surface);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--muted);margin-bottom:14px;text-align:center}
+.fc-card{background:var(--card);border:2px solid var(--border);border-radius:14px;min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 16px;text-align:center;cursor:pointer;position:relative}
+.fc-side{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.fc-content{font-size:15px;font-weight:700;color:#fff;line-height:1.5}
+.fc-back{font-size:12px;color:var(--text);opacity:.85;margin-top:10px;line-height:1.5;display:none}
+.fc-card.flip .fc-content{color:var(--gold)}
+.fc-card.flip .fc-back{display:block}
+.fc-ctrl{display:flex;gap:8px;margin-top:12px}
+.fc-btn{flex:1;padding:12px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
+.fc-no{background:rgba(232,90,122,.15);color:var(--pink)}
+.fc-yes{background:rgba(90,232,180,.15);color:var(--green)}
+.fc-cnt{text-align:center;font-size:12px;color:var(--muted);margin-top:10px}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-sup">Stanford University · Robert Sapolsky</div>
+  <h1>Биология <span>Поведения</span> Человека</h1>
+  <div class="hdr-sub">Шпаргалка · 25 лекций · Словарь · Тест · Карточки</div>
+</div>
+<div class="tabs">
+  <div class="tab active" onclick="showPage('lectures',this)">📚 Лекции</div>
+  <div class="tab" onclick="showPage('glossary',this)">📖 Словарь</div>
+  <div class="tab" onclick="showPage('quiz',this)">🧠 Тест</div>
+  <div class="tab" onclick="showPage('flashcards',this)">🃏 Карточки</div>
+  <div class="tab" onclick="showPage('author',this)">👤 Автор</div>
+</div>
+<div class="page active" id="page-lectures">
+  <input class="search-box" id="searchInput" type="text" placeholder="🔍 Поиск по теме или термину..." oninput="filterLectures()">
+  <div class="chips" id="chips">
+    <div class="chip on" onclick="filterChip('all',this)">Все</div>
+    <div class="chip" onclick="filterChip('evolution',this)">Эволюция</div>
+    <div class="chip" onclick="filterChip('genetics',this)">Генетика</div>
+    <div class="chip" onclick="filterChip('neuro',this)">Нейронауки</div>
+    <div class="chip" onclick="filterChip('hormones',this)">Гормоны</div>
+    <div class="chip" onclick="filterChip('behavior',this)">Поведение</div>
+    <div class="chip" onclick="filterChip('chaos',this)">Сложность</div>
+  </div>
+  <div id="lec-list"></div>
+</div>
+<div class="page" id="page-glossary">
+  <input class="search-box" id="glossSearch" type="text" placeholder="🔍 Поиск термина..." oninput="filterGloss()">
+  <div id="gloss-list"></div>
+</div>
+<div class="page" id="page-quiz">
+  <div id="quiz-container"></div>
+</div>
+<div class="page" id="page-flashcards">
+  <div class="fc-info">Нажмите на карточку — увидите определение. Затем оцените себя.</div>
+  <div class="fc-card" id="fc-card" onclick="flipCard()">
+    <div class="fc-side" id="fc-side">Термин</div>
+    <div class="fc-content" id="fc-front">Загрузка...</div>
+    <div class="fc-back" id="fc-back"></div>
+  </div>
+  <div class="fc-ctrl" id="fc-ctrl" style="display:none">
+    <button class="fc-btn fc-no" onclick="fcAns(false)">✗ Не знал</button>
+    <button class="fc-btn fc-yes" onclick="fcAns(true)">✓ Знал</button>
+  </div>
+  <div class="fc-cnt" id="fc-cnt"></div>
+  <div style="margin-top:12px"><button class="btn sec" onclick="fcRestart()">↺ Перемешать заново</button></div>
+</div>
+<div class="page" id="page-author">
+  <div class="author-photo">🦧</div>
+  <div class="author-name">Robert M. Sapolsky</div>
+  <div class="author-title">Профессор биологии и нейронаук · Stanford University</div>
+  <div class="author-sec"><h3>Биография</h3><p>Родился в 1957 г. в Нью-Йорке. Бакалавр Гарварда (биологическая антропология, 1978), PhD Рокфеллеровского университета (нейроэндокринология, 1984). Профессор Стэнфорда с 1987 г. Более 30 лет изучает бабуинов в саванне Серенгети как модель стресса и иерархии.</p></div>
+  <div class="author-sec"><h3>Ключевые достижения</h3><ul><li>Открыл нейротоксичность кортизола (разрушение гиппокампа)</li><li>Пионер исследований стресса и поведения</li><li>Премия «Гений» фонда МакАртура (1987)</li><li>380+ научных публикаций</li></ul></div>
+  <div class="author-sec"><h3>Книги</h3><ul><li><b>«Почему у зебр не бывает язвы»</b> (1994) — о стрессе</li><li><b>«Биология добра и зла» (Behave)</b> (2017) — главный труд</li><li><b>«Determined»</b> (2023) — о свободе воли</li><li><b>«A Primate's Memoir»</b> (2001) — о жизни с бабуинами</li></ul></div>
+  <div class="author-sec alink"><h3>Курс на YouTube</h3><a href="https://www.youtube.com/playlist?list=PL848F2368C90DDC3D" target="_blank">▶ Полный плейлист Stanford · YouTube</a><a href="https://www.youtube.com/playlist?list=PLqeYp3nxIYpF7dW7qK8OvLsVomHrnYNjD" target="_blank">▶ Альтернативный плейлист (25 лекций)</a></div>
+  <div class="author-sec alink"><h3>Дополнительно</h3><a href="https://www.ted.com/talks/robert_sapolsky_the_biology_of_our_best_and_worst_selves" target="_blank">🎤 TED Talk: Биология лучшего и худшего в нас</a><a href="http://www.robertsapolskyrocks.com" target="_blank">📝 Конспекты всех лекций (eng)</a><a href="https://alexvermeer.com/human-behavioral-biology-01-introduction/" target="_blank">📝 Подробные саммари (alexvermeer.com)</a></div>
+  <div class="author-sec"><h3>Цитата</h3><p style="font-style:italic;color:var(--gold);font-size:13px;line-height:1.6">"We are nothing but the sum total of the electrical and chemical events in our nervous system. But that sum can be extraordinary."</p></div>
+</div>
+<script>
+const L=[
+{num:1,cat:'evolution',col:'#e8b45a',title:'Введение',yt:'https://www.youtube.com/watch?v=NNnIGh9g6fA',idea:'Поведение нельзя объяснить одной дисциплиной. Нужно смотреть через все «вёдра» одновременно: гены, гормоны, мозг, эволюцию, среду.',summary:'Сапольски задаёт главный вопрос курса: почему мы делаем то, что делаем? Показывает на примере мужчины с опухолью мозга, как одно биологическое изменение меняет личность. Вводит концепцию «вёдер» и предупреждает об опасности категориального мышления.',outcomes:['Понять, что поведение — продукт многих уровней одновременно','Осознать ловушку категориального мышления','Получить карту дисциплин курса'],terms:[{n:'Buckets (вёдра)',d:'Дисциплинарные фильтры мышления: нейробиология, генетика, эволюция, гормоны. Опасно застрять в одном.',ex:'Ошибка: «это только гормоны» — так же плохо, как «это только воспитание»'},{n:'Категориальное мышление',d:'Склонность мозга делить непрерывные явления на чёткие категории.',ex:'Где красный переходит в оранжевый? Граница условна, но мы её «видим»'},{n:'Менструальная синхронизация',d:'Феромоны синхронизируют циклы у самок — как у хомяков, так и у женщин (эффект Уэлсли).',ex:'Студентки-соседки синхронизируют менструальный цикл через воздушные феромоны'}],sources:[{t:'Книга: Behave (Биология добра и зла)',u:'https://www.ozon.ru/product/biologiya-dobra-i-zla-sapolski-robert-m-318059047/'},{t:'Конспект лекции 1 (eng)',u:'http://www.robertsapolskyrocks.com/intro-to-human-behavioral-biology.html'}]},
+{num:2,cat:'evolution',col:'#5a9ee8',title:'Поведенческая эволюция I',yt:'https://www.youtube.com/watch?v=Y0Oa4Lp5fLE',idea:'Животные ведут себя не «ради блага вида» — это миф. Поведение эволюционировало ради максимизации передачи собственных генов.',summary:'Разбирает три механизма: индивидуальный отбор, родственный отбор, реципрокный альтруизм. Вводит теорию игр и Дилемму заключённого (Tit-for-Tat). Показывает спектр турнирный↔парный вид и где на нём человек.',outcomes:['Понять разницу индивидуального и групповой отбора','Освоить инклюзивную приспособленность','Знать стратегию Tit-for-Tat'],terms:[{n:'Индивидуальный отбор',d:'Поведение определяется выгодой для собственных генов. «Эгоистичный ген» по Докинзу.',ex:'Самец дерётся за территорию — ради доступа к самкам и передачи генов'},{n:'Родственный отбор',d:'Помогать родственникам выгодно: они несут копии твоих генов. Коэффициент r.',ex:'r=0.5 для брата, r=0.25 для племянника. Пчела гибнет защищая улей — её гены в сёстрах'},{n:'Инклюзивная приспособленность',d:'Свой репродуктивный успех + взвешенный успех родственников.',ex:'Суммируем собственных детей + половину детей брата + четверть детей племянника'},{n:'Реципрокный альтруизм',d:'Помощь неродственнику в расчёте на взаимность. Требует памяти и долгих отношений.',ex:'Вампировые летучие мыши делятся кровью с теми, кто делился с ними раньше'},{n:'Tit-for-Tat',d:'Стратегия в Дилемме заключённого: сотрудничай первым, потом копируй ход партнёра. Эволюционно оптимальна.',ex:'Прощающий Tit-for-Tat: через случайный ход кооперируй снова — избегает бесконечных циклов мести'},{n:'Турнирные vs. парные виды',d:'Турнирные: один самец + много самок, высокий диморфизм. Парные: равный вклад, низкий диморфизм.',ex:'Олень — турнирный. Альбатрос — парный. Человек — посередине, что создаёт «страшную путаницу»'}],sources:[{t:'Докинз: Эгоистичный ген',u:'https://www.ozon.ru/product/egoistichnyy-gen-dokkinz-richard-18698083/'},{t:'Конспект лекции 2',u:'https://alexvermeer.com/human-behavioral-biology-02-behavioral-evolution-i/'}]},
+{num:3,cat:'evolution',col:'#e85a7a',title:'Поведенческая эволюция II',yt:'https://www.youtube.com/watch?v=oHn2HEOQWCg',idea:'Инфантицид, адельфическая полиандрия, геномный импринтинг — логичные эволюционные стратегии, а не патологии.',summary:'Инфантицид у самцов-хищников: логика времени. Защитные стратегии самок. Системы спаривания: от полигинии до адельфической полиандрии. Геномный импринтинг как «замороженный» конфликт геномов отца и матери. Критика адаптационизма: спандрелы Гулда.',outcomes:['Понять логику инфантицида','Различать типы полиандрии','Понять геномный импринтинг и метилирование'],terms:[{n:'Инфантицид',d:'Убийство детёнышей самцами. Происходит когда время правления самца < времени выращивания детёныша.',ex:'Новый лев убивает детёнышей при захвате прайда → самки возобновляют овуляцию'},{n:'Полигиния',d:'Один самец + несколько самок. Самая распространённая система у млекопитающих.',ex:'Гаремы у морских слонов, горилл'},{n:'Полиандрия',d:'Одна самка + несколько самцов. Редкий тип. Обычно с ролевой инверсией.',ex:'Якана: самка держит территорию, несколько самцов выхаживают птенцов'},{n:'Адельфическая полиандрия',d:'Самка + несколько братьев-самцов. Конфликт минимален: ребёнок любого — племянник остальных.',ex:'Тибет/Непал: женщина замужем за братьями. Два льва в прайде — почти всегда братья'},{n:'Геномный импринтинг',d:'Ген работает по-разному в зависимости от того, от какого родителя получен. Механизм — метилирование.',ex:'IGF2 (рост плода): работает отцовская копия; H19 (тормоз роста): только материнская'},{n:'Метилирование',d:'Химическая пометка цитозина (CH₃): ген замолкает. Не мутация — последовательность ДНК не меняется.',ex:'Синдром Прадера-Вилли vs. Ангельмана: один участок 15-й хромосомы, но разный родитель'},{n:'Спандрелы (Гулд)',d:'Признаки, возникшие не как адаптация, а как побочный эффект другой адаптации.',ex:'Пупок у мужчин. Подбородок человека. «Эволюция — тinkerer, а не инженер»'},{n:'Групповой отбор',d:'Отбор на уровне группы. Долго отвергался, реабилитирован Д.С. Уилсоном и Э.О. Уилсоном.',ex:'Группа пассивных кур даёт больше яиц, чем группа агрессивных — многоуровневый отбор'}],sources:[{t:'Конспект лекции 3',u:'https://alexvermeer.com/human-behavioral-biology-03-behavioral-evolution-ii/'},{t:'Транскрипт лекции 3 (eng)',u:'https://singjupost.com/transcript-robert-sapolsky-on-behavioral-evolution-ii-at-stanford/'}]},
+{num:4,cat:'genetics',col:'#5ae8b4',title:'Молекулярная генетика I',yt:'https://www.youtube.com/watch?v=_dRXA1_e30o',idea:'Центральная догма (ДНК→РНК→Белок) слишком упрощена. Эпигенетика меняет правила: среда включает и выключает гены.',summary:'Переход от эволюции к молекулярному уровню. Структура гена: экзоны, интроны, промоторы, репрессоры. Альтернативный сплайсинг: один ген — много белков. Эпигенетика: изменение экспрессии без изменения ДНК. Пунктуализм Гулда vs. градуализм.',outcomes:['Понять структуру гена и сплайсинг','Различить мутацию и эпигенетику','Понять, почему ген ≠ судьба'],terms:[{n:'Экзоны / интроны',d:'Экзоны — кодирующие участки. Интроны — некодирующие. Один ген → много белков через альтернативный сплайсинг.',ex:'Ген DSCAM у дрозофилы: 38 000 вариантов белка из одного гена'},{n:'Промоторы и репрессоры',d:'Некодирующие участки ДНК, управляющие включением/выключением генов в ответ на сигналы среды.',ex:'Кортизол связывается с GRE-промотором → включает ген стрессового белка'},{n:'Эпигенетика',d:'Изменение экспрессии генов без изменения последовательности ДНК. Может наследоваться. Обратимо.',ex:'Метилирование, ацетилирование гистонов — «переключатели» на генах'},{n:'Центральная догма',d:'ДНК → мРНК → Белок. Базовый принцип молекулярной биологии, но реальность сложнее.',ex:'РНК может влиять обратно (ретровирусы, эпигенетика). Догма верна, но не полна'},{n:'Пунктуализм (Гулд)',d:'Эволюция не только плавная — возможны быстрые скачки (прерывистое равновесие).',ex:'Кембрийский взрыв: за ~20 млн лет все основные типы животных'}],sources:[{t:'Конспект лекции 4',u:'https://alexvermeer.com/human-behavioral-biology-04-molecular-genetics-i/'}]},
+{num:5,cat:'genetics',col:'#b45ae8',title:'Молекулярная генетика II',yt:'https://www.youtube.com/watch?v=Y3RQoMQEZmo',idea:'PKU, AIS, FOXP2 доказывают: наличие гена не означает неизбежности его проявления. Среда — переключатель.',summary:'Конкретные примеры взаимодействия генов и среды. PKU: мутация есть, болезни нет при правильной диете. AIS: XY-хромосомы без рецептора — женский фенотип. FOXP2 — ген речи. Транскрипционные факторы управляют сотнями генов.',outcomes:['Понять разницу генотип/фенотип','Знать ключевые примеры ген-среда взаимодействия','Понять роль транскрипционных факторов'],terms:[{n:'PKU (фенилкетонурия)',d:'Мутация одного гена → накопление фенилаланина → умственная отсталость. НО: диета без фенилаланина = норма.',ex:'Лучший пример курса: ген ≠ приговор. Среда (диета) решает всё'},{n:'AIS (синдром Мориса)',d:'XY-хромосомы, но нет рецептора к тестостерону → внешне женщина. Гены ≠ фенотип.',ex:'«Мужские» гены + женское тело и поведение. 1 на ~40 000 рождений'},{n:'FOXP2',d:'Ген, критически важный для речи и тонкой моторики артикуляции. Мутация → нарушения речи при нормальном интеллекте.',ex:'Семья KE в Британии: 16 членов с мутацией FOXP2 — все с речевыми нарушениями'},{n:'Транскрипционные факторы',d:'Белки, которые включают/выключают группы генов. Один ТФ управляет сотнями генов-мишеней.',ex:'p53: «страж генома», включает апоптоз при мутациях. Мутация p53 → рак'},{n:'Генотип vs. фенотип',d:'Генотип — набор генов. Фенотип — реальное проявление признака. Один генотип → много фенотипов.',ex:'Норма реакции: одно растение в тени и на солнце — разные размеры'}],sources:[{t:'Конспект лекции 5',u:'https://alexvermeer.com/human-behavioral-biology-05-molecular-genetics-ii/'}]},
+{num:6,cat:'genetics',col:'#e8b45a',title:'Генетика поведения I',yt:'https://www.youtube.com/watch?v=4rwi48fQBgg',idea:'Наследуемость ≠ наследственность. Ген влияет на вариабельность признака в данной среде, а не на сам признак.',summary:'Концепция наследуемости и её частые неверные интерпретации в СМИ. Исследования близнецов и их ограничения. Непрямые генетические эффекты. Полигенные признаки.',outcomes:['Правильно читать данные о наследуемости','Понять ограничения близнецовых исследований','Знать непрямые генетические эффекты'],terms:[{n:'Наследуемость (heritability)',d:'Доля вариации признака в популяции, объяснимая генетическими различиями. НЕ «ген определяет признак».',ex:'Рост в Нидерландах: h²=90%, но средний рост вырос на 15 см за 150 лет — это среда, не гены'},{n:'МЗ vs. ДЗ близнецы',d:'Монозиготные (100% общих генов) vs. дизиготные (50%). Сравнение оценивает вклад генов.',ex:'IQ: МЗ=85% сходства, ДЗ=60% — высокая наследуемость. Но не «ген IQ»'},{n:'Непрямые генетические эффекты',d:'Гены влияют через третьи факторы: темперамент → стиль воспитания → поведение ребёнка.',ex:'Ген тревожности → тревожный родитель → тревожная среда → тревожный ребёнок'},{n:'Полигенные признаки',d:'Сложные черты (интеллект, личность) определяются тысячами генов с очень малым эффектом каждого.',ex:'Рост: ~10 000 генов. Каждый даёт ±0.1–0.3 мм. Ни один не «ген роста»'}],sources:[{t:'Конспект лекции 6',u:'https://alexvermeer.com/human-behavioral-biology-06-behavioral-genetics-i/'}]},
+{num:7,cat:'genetics',col:'#5a9ee8',title:'Генетика поведения II',yt:'https://www.youtube.com/watch?v=n5LaeGkMEyA',idea:'Гены задают диапазон возможного. Среда определяет, где внутри этого диапазона окажётся организм.',summary:'Норма реакции — ключевая концепция. Эксперимент Беляева с лисами: один признак отбора изменил всё. GxE взаимодействие: ген в разных средах = разные результаты. Эффект основателя.',outcomes:['Понять норму реакции','Знать эксперимент Беляева','Правильно интерпретировать GxE'],terms:[{n:'Норма реакции',d:'Один генотип → разные фенотипы в разных условиях. Ген задаёт диапазон, не точку.',ex:'Одно растение: засуха → маленькое; полив → крупное. Ген тот же'},{n:'GxE взаимодействие',d:'Ген × Среда. Нельзя предсказать эффект гена без знания среды, и наоборот.',ex:'MAOA «ген воина»: агрессивность только при сочетании с детской травмой. Ни то, ни то отдельно'},{n:'Опыт Беляева (лисы)',d:'За 40 поколений отбора только по ручности — изменились гормоны, внешность, поведение.',ex:'Одомашнивание: висячие уши, белые пятна, снижение кортизола в стрессе'},{n:'Эффект основателя',d:'Изолированная малая популяция несёт случайную выборку генов → ускоренная эволюция необычных черт.',ex:'Амиши: высокая частота полидактилии из-за небольшой группы-основателя'}],sources:[{t:'Конспект лекции 7',u:'https://alexvermeer.com/human-behavioral-biology-07-behavioral-genetics-ii/'}]},
+{num:8,cat:'genetics',col:'#e85a7a',title:'Распознавание родственников',yt:'https://www.youtube.com/watch?v=9tIj5U4P0BQ',idea:'Животные и люди распознают родных через запах, социальный контекст и раннее обучение. Разные виды — по-разному.',summary:'MHC определяет запах тела → выбор партнёра с другим MHC = иммунное разнообразие потомства. Эффект Вестермарка. Экзогамия vs. эндогамия и уровень межгрупповой агрессии.',outcomes:['Знать роль MHC в выборе партнёра','Понять эффект Вестермарка','Различать экзогамию и эндогамию'],terms:[{n:'MHC (гистосовместимость)',d:'Гены иммунной системы. Запах тела отражает MHC. Люди бессознательно предпочитают партнёров с другим MHC.',ex:'Женщины предпочитают запах футболки мужчины с отличающимся MHC от своего'},{n:'Эффект Вестермарка',d:'Совместное воспитание в детстве блокирует сексуальное влечение — даже между НЕродственниками.',ex:'Кибуцы Израиля: нет браков между детьми, воспитанными вместе с рождения'},{n:'Экзогамия / эндогамия',d:'Экзогамия — брак вне группы. Эндогамия — внутри. Влияет на уровень межгрупповой агрессии.',ex:'Шимпанзе: уходят самки → самцы-братья → сплочённость внутри + геноцид чужих групп'}],sources:[{t:'Конспект лекции 8',u:'https://alexvermeer.com/human-behavioral-biology-08-recognizing-relatives/'}]},
+{num:9,cat:'behavior',col:'#5ae8b4',title:'Этология',yt:'https://www.youtube.com/watch?v=ISGkjJ_fVOY',idea:'Поведение — продукт эволюции. Изучать его нужно в естественной среде, а не только в лаборатории.',summary:'Этология vs. бихевиоризм. Лоренц, Тинберген, фон Фриш. Фиксированные паттерны действий (FAP). Поведенческий импринтинг. Супернормальные стимулы.',outcomes:['Знать ключевых этологов','Понять FAP','Объяснить супернормальный стимул'],terms:[{n:'Этология',d:'Наука о поведении в естественной среде. Противопоставлена бихевиоризму (лаборатория, стимул-реакция).',ex:'Лоренц изучал гусей во дворе. Тинберген — рыб в море. Фон Фриш — танец пчёл'},{n:'FAP (фиксированный паттерн действий)',d:'Врождённая стереотипная программа. Запускается ключевым стимулом, неостановима после запуска.',ex:'Гусыня катит яйцо в гнездо — даже если яйцо убрали, движение продолжается до конца'},{n:'Поведенческий импринтинг',d:'Усвоение образца «матери» в критический период раннего развития. Необратимо.',ex:'Гусята Лоренца шли за ним — он стал для них «мамой» навсегда'},{n:'Супернормальный стимул',d:'Искусственный стимул, превышающий природный по силе воздействия на поведение.',ex:'Птица бросает своё яйцо и высиживает огромное искусственное'},{n:'Бихевиоризм',d:'Поведение = реакция на стимул. Игнорирует внутренние состояния и эволюцию.',ex:'Скиннер: любое поведение формируется подкреплением. Сапольски: наивно упрощает'}],sources:[{t:'Конспект лекции 9',u:'https://alexvermeer.com/human-behavioral-biology-09-ethology/'}]},
+{num:10,cat:'neuro',col:'#b45ae8',title:'Нейронауки I',yt:'https://www.youtube.com/watch?v=NRxqcnGvYeo',idea:'Нейрон — основная единица мозга. Поведение = паттерны электрохимической активности в нейронных сетях.',summary:'Строение нейрона, потенциал действия, синаптическая передача. ЦНС и ПНС. Основные нейромедиаторы. Фармакология: как препараты меняют поведение через химию мозга.',outcomes:['Знать строение нейрона','Понять синаптическую передачу','Различать нейромедиаторы'],terms:[{n:'Нейрон',d:'Клетка нервной системы. Дендриты принимают сигналы, аксон передаёт их следующей клетке.',ex:'86 млрд нейронов в мозге человека, ~100 трлн синапсов между ними'},{n:'Потенциал действия',d:'Электрический импульс вдоль аксона. «Всё или ничего» — не бывает «слабого» импульса.',ex:'Скорость 0.5–120 м/с в зависимости от типа волокна и миелинизации'},{n:'Синапс',d:'Соединение между нейронами. Нейромедиаторы переносят сигнал через синаптическую щель.',ex:'1 нейрон может иметь до 100 000 синапсов. Щель ~20 нм'},{n:'Глутамат / ГАМК',d:'Главные медиаторы: глутамат — возбуждает, ГАМК — тормозит. Их баланс определяет активность мозга.',ex:'Алкоголь усиливает ГАМК → торможение → расслабление → координация нарушается'},{n:'Дофамин / серотонин',d:'Дофамин: вознаграждение, мотивация. Серотонин: настроение, импульсный контроль.',ex:'Кокаин блокирует обратный захват дофамина → эйфория. СИОЗС блокируют захват серотонина → антидепрессанты'}],sources:[{t:'Конспект лекции 10',u:'https://alexvermeer.com/human-behavioral-biology-10-neuroscience-i/'}]},
+{num:11,cat:'neuro',col:'#e8b45a',title:'Нейронауки II',yt:'https://www.youtube.com/watch?v=wh4LZuiU3Hc',idea:'Пластичность мозга — фундаментальное свойство. Гиппокамп хранит память. Нейрогенез возможен у взрослых.',summary:'LTP — клеточный механизм обучения. Гиппокамп: формирование новых воспоминаний. Нейрогенез у взрослых. Симпатическая vs. парасимпатическая нервная система.',outcomes:['Знать роль гиппокампа','Понять LTP','Различать симпатику и парасимпатику'],terms:[{n:'Гиппокамп',d:'Критичен для формирования новых декларативных воспоминаний. Разрушается при хроническом стрессе.',ex:'Пациент H.M. без гиппокампа: каждый день как первый. Не помнит ничего нового'},{n:'LTP (долговременная потенциация)',d:'Укрепление синапса при повторной стимуляции. Клеточный механизм памяти и обучения.',ex:'«Нейроны, активирующиеся вместе — связываются вместе» (постулат Хебба)'},{n:'Нейрогенез взрослых',d:'Новые нейроны образуются в зубчатой извилине гиппокампа всю жизнь. Подавляется стрессом.',ex:'30 мин аэробной нагрузки → ↑BDNF → нейрогенез → улучшение памяти через недели'},{n:'Симпатика / парасимпатика',d:'Симпатическая НС: «бей-беги» (адреналин). Парасимпатическая: «отдых-переваривание» (ацетилхолин).',ex:'Стресс → симпатика → ЧСС↑, зрачки↑, пищеварение↓, болевой порог↑'}],sources:[{t:'Конспект лекции 11',u:'https://alexvermeer.com/human-behavioral-biology-11-neuroscience-ii/'}]},
+{num:12,cat:'hormones',col:'#5a9ee8',title:'Эндокринология',yt:'https://www.youtube.com/watch?v=0BVZmMHFhkQ',idea:'Гормоны не «вызывают» поведение — они изменяют вероятность поведения в нужном контексте.',summary:'Пептидные vs. стероидные гормоны: разные механизмы и сроки. Ось HPA — стрессовый ответ. Двойная роль кортизола. Механизм отрицательной обратной связи.',outcomes:['Различать пептидные и стероидные гормоны','Знать ось HPA','Понять двойственную роль кортизола'],terms:[{n:'Пептидные гормоны',d:'Белковые (инсулин, окситоцин). Быстрые. Действуют через рецепторы на поверхности клетки.',ex:'Инсулин: связался с рецептором → клетка открыла «двери» для глюкозы'},{n:'Стероидные гормоны',d:'Производные холестерина (кортизол, тестостерон). Проникают в клетку, меняют экспрессию генов. Медленные.',ex:'Тестостерон → изменение экспрессии сотен генов в мозге за дни и недели'},{n:'Ось HPA',d:'Гипоталамус (CRH) → Гипофиз (ACTH) → Надпочечники (кортизол). Главная ось стресса.',ex:'Встреча с тигром: CRH → ACTH → кортизол → глюкоза в мышцы за секунды'},{n:'Кортизол',d:'«Гормон стресса». Острый: мобилизует. Хронический: разрушает гиппокамп, иммунитет, кости.',ex:'Стрессовое животное с хроническим ↑кортизолом хуже учится и болеет чаще'},{n:'Обратная связь HPA',d:'Кортизол подавляет CRH и ACTH — выключает стрессовую ось. При депрессии нарушен.',ex:'Тест дексаметазоном: норма → кортизол падает; депрессия → не падает'}],sources:[{t:'Книга: Почему у зебр не бывает язвы',u:'https://www.ozon.ru/product/pochemu-u-zeber-ne-byvaet-yazvy-sapolski-robert-m-166851789/'},{t:'Конспект лекции 12',u:'https://alexvermeer.com/human-behavioral-biology-12-endocrinology/'}]},
+{num:13,cat:'hormones',col:'#e85a7a',title:'Нейронауки + Эндокринология (продвинутый)',yt:'https://www.youtube.com/watch?v=vD0PBhxTlRc',idea:'Гормоны и мозг — двусторонняя петля: мозг управляет гормонами, гормоны перестраивают мозг.',summary:'Организующие эффекты (пренатальный период формирует структуру) vs. активирующие (взрослый возраст активирует цепи). Рецепторная чувствительность. Нейростероиды.',outcomes:['Различать организующие и активирующие эффекты','Понять роль рецепторной чувствительности'],terms:[{n:'Организующие эффекты',d:'Гормоны в пренатальный период формируют структуру мозга необратимо.',ex:'Тестостерон плода 8-24 нед → маскулинизация гипоталамуса и половые различия поведения'},{n:'Активирующие эффекты',d:'Гормоны у взрослого активируют уже сформированные нейронные цепи.',ex:'Тестостерон у взрослого → ↑агрессия только если цепи уже «настроены» в пренатальный период'},{n:'Рецепторная чувствительность',d:'Важно не только количество гормона, но и количество/чувствительность рецепторов.',ex:'При AIS: тестостерон в норме, рецепторов нет → нет мужского фенотипа совсем'},{n:'Нейростероиды',d:'Стероидные гормоны, синтезируемые прямо в нервной ткани. Локальное действие.',ex:'Прогестерон → аллопрегнанолон → усиливает ГАМК → успокаивающий эффект в мозге'}],sources:[{t:'Конспект лекции 13',u:'http://www.robertsapolskyrocks.com/advanced-neurology-and-endocrinology.html'}]},
+{num:14,cat:'neuro',col:'#5ae8b4',title:'Лимбическая система',yt:'https://www.youtube.com/watch?v=CAOnSbDSaOw',idea:'Амигдала реагирует быстрее коры. Дофамин — это про ожидание, а не получение. ПФК тормозит импульсы.',summary:'Амигдала: страх и угроза без осознания. ПФК тормозит амигдалу — созревает к 25 годам. Дофаминовый механизм вознаграждения: пик при ожидании, особенно случайном.',outcomes:['Знать роль амигдалы и ПФК','Понять дофамин как предвкушение','Описать лимбическую систему'],terms:[{n:'Амигдала',d:'Центр страха, угрозы, агрессии. Реагирует за ~120 мс — быстрее осознанного восприятия.',ex:'Отдёрнул руку от змеи до осознания опасности — это амигдала. Потом пришла кора'},{n:'Префронтальная кора (ПФК)',d:'Тормозит амигдалу. Контроль импульсов, планирование, мораль. Созревает к ~25 годам.',ex:'Финеас Гейдж: железный прут повредил ПФК → стал импульсивным, грубым, ненадёжным'},{n:'Дофамин и предвкушение',d:'Дофамин выделяется при ожидании награды, а не при её получении. Максимален при случайном подкреплении.',ex:'Игровой автомат: случайность → пик дофамина → зависимость. Регулярная награда хуже работает'},{n:'Ядро прилежащее (NAc)',d:'Центр системы удовольствия. VTA проецирует дофамин в NAc.',ex:'Все наркотики (кокаин, алкоголь, никотин) увеличивают дофамин в NAc — разными путями'}],sources:[{t:'Конспект лекции 14',u:'http://www.robertsapolskyrocks.com/limbic-system.html'}]},
+{num:15,cat:'behavior',col:'#b45ae8',title:'Сексуальное поведение I',yt:'https://www.youtube.com/watch?v=0FJdYIJzDHc',idea:'Сексуальная ориентация — результат пренатальных гормонов, генов и среды. Не выбор, не болезнь.',summary:'Пренатальный тестостерон формирует половые различия мозга. CAH — природный эксперимент. Братский порядок рождения и ориентация: иммунная гипотеза. VNO и феромоны у людей.',outcomes:['Понять пренатальные гормональные эффекты','Знать биологические данные о сексуальной ориентации'],terms:[{n:'Пренатальный тестостерон',d:'Уровень T у плода формирует половые различия в мозге. Критические окна: 8–24 неделя.',ex:'CAH (↑андрогены у девочек): маскулинизированное поведение, ↑пространственное мышление'},{n:'CAH (гиперплазия надпочечников)',d:'Врождённый дефект: избыток андрогенов с пренатального периода. Природный эксперимент.',ex:'Девочки с CAH: более «мальчишеские» игры, ↑вероятность гомосексуальности'},{n:'Эффект братского порядка',d:'Каждый следующий биологический брат имеет чуть более высокую вероятность гомосексуальности. Иммунная гипотеза.',ex:'Мать вырабатывает антитела к Y-хромосомному антигену NLGN4Y → маскулинизация↓'},{n:'VNO и феромоны',d:'Вомероназальный орган у людей рудиментарен. Но химические сигналы влияют через обоняние.',ex:'Андростадиенон из пота меняет настроение и оценку привлекательности у женщин'}],sources:[{t:'Конспект лекции 15',u:'http://www.robertsapolskyrocks.com/human-sexual-behavior-i.html'}]},
+{num:16,cat:'behavior',col:'#e8b45a',title:'Сексуальное поведение II',yt:'https://www.youtube.com/watch?v=GRhB4LcBO5A',idea:'Часть критериев привлекательности универсальна, часть культурна. Принцип «дорогого сигнала» объясняет парадокс павлина.',summary:'Симметрия лица — сигнал генетического здоровья. Принцип Захави: дорогой сигнал честен. WHR 0.7 — кросскультурный маркер. Сексуальный диморфизм у человека — умеренный.',outcomes:['Знать принцип честного сигнала','Понять универсальные критерии привлекательности','Связать с эволюцией'],terms:[{n:'Флуктуирующая асимметрия',d:'Случайные отклонения от симметрии: маркер генетического стресса. Симметричнее = привлекательнее.',ex:'Лица с высокой симметрией воспринимаются как более здоровые кросскультурно'},{n:'Принцип Захави (Handicap)',d:'Дорогостоящий сигнал честен: только здоровый самец может позволить такой «балласт».',ex:'Хвост павлина: снижает выживаемость, но сигнализирует о генетическом здоровье — обмануть нельзя'},{n:'WHR (соотношение талия/бёдра)',d:'WHR ~0.7 у женщин воспринимается как привлекательное кросскультурно. Маркер фертильности.',ex:'Исследование Сингха: мужчины в 37 культурах предпочитают WHR 0.7 независимо от веса'},{n:'Сексуальный диморфизм',d:'Различия между полами вида. Коррелирует с системой спаривания.',ex:'Горилла: самец в 2× больше (полигиния). Гиббон: равные (моногамия). Человек — между'}],sources:[{t:'Конспект лекции 16',u:'http://www.robertsapolskyrocks.com/human-sexual-behavior-ii.html'}]},
+{num:17,cat:'behavior',col:'#5a9ee8',title:'Сексуальное поведение III + Агрессия I',yt:'https://www.youtube.com/watch?v=hVWMsJwSAYc',idea:'Агрессия — не единый феномен. Хищническая и аффективная — разные системы. Тестостерон — следствие доминирования, не причина.',summary:'Окситоцин: любовь к своим + ксенофобия к чужим одновременно. Типология агрессии. Тестостерон: растёт после победы, не до. Серотонин и импульсный контроль.',outcomes:['Различать типы агрессии','Правильно понимать роль тестостерона','Знать роль серотонина'],terms:[{n:'Хищническая агрессия',d:'Холодная, целенаправленная. Гипоталамус. Мало задействует амигдалу. Нет аффекта.',ex:'Снайпер, профессиональный убийца — расчёт без эмоции'},{n:'Аффективная агрессия',d:'Горячая, эмоциональная вспышка. Высокое возбуждение, активная амигдала, слабый контроль ПФК.',ex:'Вспышка гнева в пробке, ярость в споре'},{n:'Тестостерон и доминирование',d:'T повышает чувствительность к статусным угрозам. Следствие победы, а не её причина.',ex:'T растёт у победителей ПОСЛЕ победы. У болельщиков выигравшей команды — тоже'},{n:'Серотонин и импульсивность',d:'Низкий серотонин → высокая импульсивная агрессия. Не сама агрессия — потеря контроля над ней.',ex:'Приматы с низким 5-HT: опасные драки, ранняя гибель из-за рискованного поведения'},{n:'Окситоцин',d:'«Гормон привязанности». Усиливает просоциальность к своим И агрессию к чужим.',ex:'Окситоцин = «люблю своих + ненавижу чужих» — два противоположных эффекта одного гормона'}],sources:[{t:'Конспект лекции 17',u:'http://www.robertsapolskyrocks.com/human-sexual-behavior-iii-and-aggression-i.html'}]},
+{num:18,cat:'neuro',col:'#e85a7a',title:'Агрессия II — Нейробиология',yt:'https://www.youtube.com/watch?v=gXAkrDJvXxE',idea:'Амигдала давит на газ, ПФК нажимает тормоз. Агрессия — дисбаланс этих двух систем.',summary:'Нейробиология агрессии детально. Синдром Клювера-Бьюси. ПФК созревает к 25 годам. Нейроны зеркала — возможный механизм эмпатии. Передняя поясная кора и «социальная боль».',outcomes:['Описать нейронные цепи агрессии','Понять роль ПФК как тормоза','Знать нейроны зеркала'],terms:[{n:'Амигдала и агрессия',d:'Стимуляция → агрессия. Повреждение → снижение страха и агрессии.',ex:'Синдром Клювера-Бьюси: удаление амигдалы → гиперсексуальность, бесстрашие, оральность'},{n:'ПФК как тормоз',d:'Орбитофронтальная и медиальная ПФК тормозят импульсивную агрессию. Зреет к ~25 годам.',ex:'Подростки: незрелая ПФК → ↑импульсивность. Аргумент против смертной казни несовершеннолетних'},{n:'Нейроны зеркала',d:'Активируются и при собственном действии, и при наблюдении за действием другого.',ex:'Видишь боль другого → твои болевые зоны частично активируются. Возможный механизм эмпатии'},{n:'АСС (передняя поясная кора)',d:'Регистрирует «социальную боль» (отвержение, несправедливость) так же, как физическую.',ex:'Социальное исключение в онлайн-игре активирует те же зоны, что и физическая боль'}],sources:[{t:'Конспект лекции 18',u:'http://www.robertsapolskyrocks.com/aggression-ii.html'}]},
+{num:19,cat:'behavior',col:'#5ae8b4',title:'Агрессия III — Генетика и ранний опыт',yt:'https://www.youtube.com/watch?v=6xVkfM8M8yY',idea:'MAOA + детская травма = риск агрессии. Но ни ген, ни травма по отдельности не приводят к этому.',summary:'MAOA — лучший пример GxE в контексте агрессии. Ранняя травма эпигенетически меняет стрессовую реактивность навсегда. In-group/out-group мышление как биологическая основа ксенофобии.',outcomes:['Понять роль MAOA','Знать эпигенетику ранней травмы','Описать in-group/out-group биологию'],terms:[{n:'MAOA («ген воина»)',d:'Фермент разрушает серотонин, дофамин, норадреналин. Низкоактивный вариант + детская травма = ↑агрессия.',ex:'GxE: ни ген один, ни травма одна не приводят к агрессии — только комбинация'},{n:'Эпигенетика ранней травмы',d:'Жестокое обращение в детстве метилирует гены рецепторов кортизола → пожизненно ↑стрессовая реактивность.',ex:'Крысята с «плохими мамами»: больше метилирование гена GR → хуже справляются со стрессом всю жизнь'},{n:'In-group / Out-group',d:'Биологически обусловленное деление на «своих» и «чужих». Разные нейронные цепи. Легко манипулируется.',ex:'Достаточно майки другого цвета — и человек становится «чужим» с иной нейронной реакцией'},{n:'Деперсонализация врага',d:'Дегуманизация «чужого» снижает активацию медиальной ПФК → облегчает причинение вреда.',ex:'Военная пропаганда: враг как «крысы» — прямой нейробиологический путь к зверствам'}],sources:[{t:'Конспект лекции 19',u:'http://www.robertsapolskyrocks.com/aggression-iii.html'}]},
+{num:20,cat:'behavior',col:'#b45ae8',title:'Агрессия IV — Культура и гормоны',yt:'https://www.youtube.com/watch?v=JbzfHgqGLtw',idea:'Культура, экология и ранние гормональные воздействия определяют уровень насилия не меньше, чем биология.',summary:'«Культура чести»: пастушеские общества vs. земледельческие. Пренатальный тестостерон как организующий фактор. Относительная депривация и насилие. Итог темы агрессии.',outcomes:['Знать теорию культуры чести','Понять экологические факторы агрессии','Синтезировать весь раздел'],terms:[{n:'Культура чести',d:'В скотоводческих обществах репутация = защита имущества → сильный аффективный ответ на оскорбление.',ex:'Юг США vs. Север: южане физиологически (кортизол, T) реагируют сильнее на оскорбление'},{n:'Пренатальный T и агрессия',d:'Тестостерон в пренатальный период организует нейронные цепи агрессии взрослого.',ex:'2D:4D соотношение пальцев — косвенный маркер пренатального уровня тестостерона'},{n:'Относительная депривация',d:'Ощущение несправедливости важнее абсолютного уровня бедности. Неравенство → агрессия.',ex:'Высокий уровень насилия не в беднейших странах, а в странах с наибольшим неравенством (Gini)'},{n:'T и доминирование',d:'Тестостерон повышает стремление к статусу и доминированию — но форма зависит от контекста.',ex:'У монахов высокий T, ноль агрессии — энергия направлена в другое русло'}],sources:[{t:'Конспект лекции 20',u:'http://www.robertsapolskyrocks.com/aggression-iv.html'}]},
+{num:21,cat:'chaos',col:'#e8b45a',title:'Хаос и редукционизм',yt:'https://www.youtube.com/watch?v=_njf8jwEGRo',idea:'Биологические системы нелинейны. Редукционизм объясняет части, но упускает целое.',summary:'«Самая трудная лекция курса». Редукционизм: работает для простых систем, не работает для сложных. Теория хаоса. Фракталы в биологии. Гормезис. Детерминированная непредсказуемость.',outcomes:['Понять ограничения редукционизма','Знать эффект бабочки','Видеть фракталы в биологии'],terms:[{n:'Редукционизм',d:'Объяснение целого через его части. Понять нейрон ≠ понять мозг.',ex:'Зная все молекулы H₂O, не предскажешь волны океана и их поведение'},{n:'Эффект бабочки',d:'Малое изменение начальных условий → огромная разница в исходе. Детерминированный хаос.',ex:'Взмах крыла бабочки → цепь атмосферных реакций → торнадо в другом месте (метафора Лоренца)'},{n:'Фракталы',d:'Самоподобные структуры: одинаковый паттерн на разных масштабах.',ex:'Бронхиальное дерево, кровеносная система, береговая линия — фракталы разной размерности'},{n:'Гормезис',d:'Малые дозы стрессора полезны, большие вредны. U-образная кривая доза-эффект.',ex:'Малый стресс → адаптация. Хронический → разрушение. Это нелинейность в чистом виде'},{n:'Нелинейность',d:'Удвоение дозы ≠ удвоение эффекта. Пороги, насыщение, обратные реакции.',ex:'Кофеин: малая доза бодрит, большая → тревога, тремор, аритмия'}],sources:[{t:'Конспект лекции 21',u:'http://www.robertsapolskyrocks.com/chaos-and-reductionism.html'},{t:'Глейк: Хаос (книга)',u:'https://www.ozon.ru/product/khaos-sozdanie-novoy-nauki-glayk-dzheyms-547688655/'}]},
+{num:22,cat:'chaos',col:'#5a9ee8',title:'Эмерджентность и сложность',yt:'https://www.youtube.com/watch?v=o_ZuWbX-CyE',idea:'Из простых правил на уровне элементов возникает сложное поведение системы, непредсказуемое из анализа частей.',summary:'Эмерджентность. Роевой интеллект. Самоорганизация. «Игра жизни» Конвея. Применение к нейронным сетям и социальному поведению.',outcomes:['Понять эмерджентность','Знать примеры самоорганизации','Связать со свободой воли'],terms:[{n:'Эмерджентность',d:'Системное свойство, которого нет ни у одного элемента системы. Целое > сумма частей.',ex:'Ни один нейрон не думает, но мозг думает. Ни один муравей не понимает архитектуры — колония строит'},{n:'Роевой интеллект',d:'Координация без центрального управления. Простые локальные правила → сложное глобальное поведение.',ex:'Скворцы в мурмурации: каждая птица следит за 7 соседями → волнообразные движения тысяч'},{n:'Самоорганизация',d:'Порядок возникает из хаоса без внешнего «дирижёра».',ex:'Полосы на тигре — результат уравнения Тьюринга (реакция-диффузия), не «программы»'},{n:'Клеточный автомат (Конвей)',d:'«Игра жизни»: три правила → бесконечная сложность паттернов из простых клеток.',ex:'Три правила рождают глайдеры, осцилляторы и самовоспроизводящиеся структуры'}],sources:[{t:'Конспект лекции 22',u:'http://www.robertsapolskyrocks.com/emergence-and-complexity.html'}]},
+{num:23,cat:'behavior',col:'#e85a7a',title:'Язык',yt:'https://www.youtube.com/watch?v=uB9oKlGCdyM',idea:'Рекурсия делает человеческий язык уникальным. Нейронные основы речи — ключ к пониманию уникальности нашего вида.',summary:'Рекурсия — уникальная черта (Чомский). Области Брока и Вернике. Универсальная грамматика. Язык у приматов: Уошо, Канзи. Язык vs. коммуникация у животных.',outcomes:['Знать области Брока и Вернике','Понять рекурсию','Оценить данные о языке у обезьян'],terms:[{n:'Рекурсия',d:'Встраивание структур в структуры бесконечно. Ключевое отличие человеческого языка.',ex:'«Маша знает, что Петя думает, что Катя хочет...» — теоретически бесконечная вложенность'},{n:'Область Брока',d:'Левая нижняя лобная доля. Продукция речи и грамматика. Повреждение → афазия Брока.',ex:'Афазия Брока: «телеграфная речь» — существительные есть, грамматики нет'},{n:'Область Вернике',d:'Левая верхняя височная доля. Понимание речи. Повреждение → афазия Вернике.',ex:'Афазия Вернике: беглая, но бессмысленная речь — слова есть, смысла нет'},{n:'Универсальная грамматика',d:'По Чомскому: грамматические принципы биологически заложены. Все языки имеют общую глубинную структуру.',ex:'Во всех ~7000 языках: существительные, глаголы, отрицание, вопросительные предложения'},{n:'Язык у приматов',d:'Шимпанзе освоили жестовый язык и лексиграммы, но без рекурсии и синтаксиса.',ex:'Канзи (бонобо): ~400 лексиграмм, понимает речь на уровне 2-летнего ребёнка'}],sources:[{t:'Конспект лекции 23',u:'http://www.robertsapolskyrocks.com/language.html'},{t:'Пинкер: Языковой инстинкт',u:'https://www.ozon.ru/product/yazykovoy-instinkt-pinkerstiven-164990994/'}]},
+{num:24,cat:'neuro',col:'#5ae8b4',title:'Шизофрения',yt:'https://www.youtube.com/watch?v=nEnklxGAmak',idea:'Шизофрения — нейроразвитийная болезнь. Генетическая предрасположенность + средовые триггеры. Манифестирует при созревании ПФК.',summary:'Позитивные vs. негативные симптомы. Дофаминовая гипотеза. Глутаматная гипотеза. Наследуемость 80%, но МЗ-близнецы совпадают лишь в 50%. Нейроразвитийная модель.',outcomes:['Различать позитивные и негативные симптомы','Знать дофаминовую гипотезу','Понять нейроразвитийную модель'],terms:[{n:'Позитивные симптомы',d:'То, чего нет в норме: галлюцинации, бред, дезорганизованное мышление. Связаны с ↑дофамином.',ex:'Голоса, параноидные идеи, магическое мышление. Хорошо поддаются антипсихотикам'},{n:'Негативные симптомы',d:'То, что исчезло: аффект, воля, социальность, речь. Хуже поддаются лечению.',ex:'Апатия, бедность речи, замкнутость. Хуже влияют на качество жизни, чем галлюцинации'},{n:'Дофаминовая гипотеза',d:'↑дофамин в мезолимбическом тракте → позитивные симптомы. Антипсихотики блокируют D2.',ex:'Кокаин: резкий ↑дофамина → паранойя, неотличимая от шизофренической'},{n:'Нейроразвитийная модель',d:'Нарушения пренатальной миграции нейронов → скрытый дефект. Проявляется при созревании ПФК (18-25 лет).',ex:'Рождённые зимой болеют чаще: возможно, грипп матери в I триместре нарушает нейромиграцию'},{n:'МЗ-близнецы: 50% совпадение',d:'Даже у идентичных близнецов шизофрения развивается не у обоих в 50% случаев. Роль среды критична.',ex:'Среда: стресс, урбанизация, каннабис в подростковом возрасте — всё повышает риск'}],sources:[{t:'Конспект лекции 24',u:'http://www.robertsapolskyrocks.com/schizophrenia.html'}]},
+{num:25,cat:'behavior',col:'#b45ae8',title:'Индивидуальные различия и итоги',yt:'https://www.youtube.com/watch?v=dNsJuYIiLvg',idea:'Понимание биологии поведения меняет взгляд на ответственность, справедливость и свободу воли.',summary:'Финальная лекция. Интеграция всех «вёдер». Биологический детерминизм и его последствия для правосудия. Стохастичность развития. Объяснить ≠ оправдать.',outcomes:['Интегрировать все темы курса','Понять позицию Сапольски о свободе воли','Применить знания к справедливости'],terms:[{n:'Биологический детерминизм',d:'Всё поведение определено биологией. Сапольски: «свободы воли нет — но объяснить ≠ оправдать».',ex:'Опухоль мозга → агрессия → лечение, а не только тюрьма. Понять = изменить систему'},{n:'Стохастичность развития',d:'Случайность молекулярных процессов в нейрогенезе. Идентичные генотипы → разные личности.',ex:'МЗ-близнецы с разными характерами: не гены, не среда — случайность нейроразвития'},{n:'Интеграция вёдер',d:'Поведение одновременно: нейроны (секунды) + гормоны (часы) + опыт (месяцы) + развитие (годы) + эволюция (тысячелетия).',ex:'Агрессия в пробке: ПФК + кортизол + детский опыт + статусный рефлекс — всё сразу'},{n:'Объяснить ≠ оправдать',d:'Биологические причины объясняют поведение, но не снимают вопрос о последствиях для общества.',ex:'Понять → сострадать → реформировать систему, а не просто наказывать'}],sources:[{t:'Книга: Determined (о свободе воли)',u:'https://www.ozon.ru/product/determined-a-science-of-life-without-free-will-sapolsky-robert-m-840015074/'},{t:'TED Talk Сапольски',u:'https://www.ted.com/talks/robert_sapolsky_the_biology_of_our_best_and_worst_selves'}]}
+];
+
+// RENDER LECTURES
+let curCat='all';
+function renderLectures(data){
+  const el=document.getElementById('lec-list');
+  el.innerHTML='';
+  data.forEach(lec=>{
+    const d=document.createElement('div');
+    d.className='lec-card';
+    d.dataset.cat=lec.cat;
+    d.dataset.text=(lec.title+' '+lec.idea+' '+lec.terms.map(t=>t.n+' '+t.d).join(' ')).toLowerCase();
+    const src=lec.sources.map(s=>`<a href="${s.u}" target="_blank">🔗 ${s.t}</a>`).join('');
+    const trm=lec.terms.map(t=>`<div class="term-row"><div class="term-name" style="color:${lec.col}">${t.n}</div><div class="term-def">${t.d}</div>${t.ex?`<div class="term-ex">→ ${t.ex}</div>`:''}</div>`).join('');
+    d.innerHTML=`
+      <div class="lec-card-head" onclick="toggle(this.parentElement)">
+        <div class="lec-num" style="color:${lec.col}">${String(lec.num).padStart(2,'0')}</div>
+        <div class="lec-meta"><div class="lec-tag" style="color:${lec.col}">${lec.cat}</div><div class="lec-title">${lec.title}</div></div>
+        <div class="lec-arrow">▾</div>
+      </div>
+      <div class="lec-body">
+        <a class="yt-btn" href="${lec.yt}" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.54 3.5 12 3.5 12 3.5s-7.54 0-9.38.55A3.02 3.02 0 0 0 .5 6.19C0 8.04 0 12 0 12s0 3.96.5 5.81a3.02 3.02 0 0 0 2.12 2.14C4.46 20.5 12 20.5 12 20.5s7.54 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14C24 15.96 24 12 24 12s0-3.96-.5-5.81zM9.75 15.52V8.48L15.82 12l-6.07 3.52z"/></svg>▶ Смотреть лекцию на YouTube</a>
+        <div class="sum-box sum-gold"><h4>💡 Главная идея</h4>${lec.idea}</div>
+        <div class="sum-box"><h4>📝 Саммари лекции</h4>${lec.summary}</div>
+        <div class="outcomes"><h4>✅ Итоги — что изучено</h4><ul>${lec.outcomes.map(o=>`<li>${o}</li>`).join('')}</ul></div>
+        <div class="sec-lbl">// ключевые термины</div>
+        ${trm}
+        <div style="height:1px;background:var(--border);margin:12px 0"></div>
+        <div class="src-box"><h4>📚 Источники</h4>${src}</div>
+      </div>`;
+    el.appendChild(d);
+  });
+}
+function toggle(c){c.classList.toggle('open');}
+function filterLectures(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.lec-card').forEach(c=>{
+    const ok=(curCat==='all'||c.dataset.cat===curCat)&&(!q||c.dataset.text.includes(q));
+    c.style.display=ok?'':'none';
+  });
+}
+function filterChip(cat,el){
+  curCat=cat;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  filterLectures();
+}
+
+// GLOSSARY
+function buildGloss(){
+  const arr=[];
+  L.forEach(lec=>lec.terms.forEach(t=>arr.push({n:t.n,d:t.d,ex:t.ex,num:lec.num,title:lec.title,col:lec.col})));
+  return arr.sort((a,b)=>a.n.localeCompare(b.n,'ru'));
+}
+function renderGloss(terms){
+  const el=document.getElementById('gloss-list');
+  let last='',html='';
+  terms.forEach(t=>{
+    const f=t.n[0].toUpperCase();
+    if(f!==last){if(last)html+='</div>';html+=`<div class="alpha-section"><div class="alpha-letter">${f}</div>`;last=f;}
+    html+=`<div class="gloss-item" data-text="${(t.n+' '+t.d).toLowerCase()}"><div class="gloss-term" style="color:${t.col}">${t.n}</div><div class="gloss-def">${t.d}</div>${t.ex?`<div class="term-ex">→ ${t.ex}</div>`:''}<div class="gloss-lec">Лекция ${t.num}: ${t.title}</div></div>`;
+  });
+  if(last)html+='</div>';
+  el.innerHTML=html;
+}
+function filterGloss(){
+  const q=document.getElementById('glossSearch').value.toLowerCase();
+  document.querySelectorAll('.gloss-item').forEach(el=>el.style.display=(!q||el.dataset.text.includes(q))?'':'none');
+}
+
+// QUIZ
+const Q=[
+  {q:'Что такое «buckets» по Сапольски?',opts:['Типы нейромедиаторов','Дисциплинарные линзы для изучения поведения','Категории животных','Уровни ДНК'],ans:1,exp:'Вёдра — дисциплинарные фильтры (нейробиология, генетика, эволюция). Опасно застрять в одном.'},
+  {q:'Что означает реципрокный альтруизм?',opts:['Помощь только родственникам','Взаимовыгодное сотрудничество с НЕродственниками','Агрессия ради доминирования','Самопожертвование ради вида'],ans:1,exp:'Помогаю тебе → ты поможешь мне потом. Требует памяти и долгих отношений. Стратегия Tit-for-Tat.'},
+  {q:'Что такое адельфическая полиандрия?',opts:['Один самец + несколько самок-сестёр','Самка + несколько самцов-братьев','Братья живут изолированно','Самцы конкурируют жребием'],ans:1,exp:'Адельфическая полиандрия: одна самка + несколько братьев. Конфликт минимален: ребёнок любого — племянник остальных.'},
+  {q:'Что такое геномный импринтинг?',opts:['Мутация в половых клетках','Ген работает по-разному от разных родителей','Полное молчание гена','Передача признаков через РНК'],ans:1,exp:'Одна копия гена «молчит» — та, что от определённого родителя. Механизм — метилирование. Не мутация ДНК.'},
+  {q:'PKU — лучший пример чего?',opts:['Что мутация всегда летальна','Что ген не приговор: среда решает','Что эволюция необратима','Что все болезни полигенны'],ans:1,exp:'PKU: мутация есть, но диета без фенилаланина = норма. Ген ≠ судьба.'},
+  {q:'Что показал опыт Беляева с лисами?',opts:['Гены не влияют на поведение','Отбор по одному признаку изменил гормоны, внешность и поведение','Лисы не одомашниваются','Агрессия наследуется от матери'],ans:1,exp:'За 40 поколений отбора только по «ручности»: висячие уши, белые пятна, снижение кортизола.'},
+  {q:'Наследуемость (heritability) — это:',opts:['% признаков от родителей','Доля вариации признака в популяции, объяснимая генами','Вероятность наследования болезни','То же, что наследственность'],ans:1,exp:'Наследуемость — статистическая мера вариации в конкретной среде. НЕ то же, что «ген определяет признак».'},
+  {q:'Что такое LTP?',opts:['Долгосрочное действие гормонов','Укрепление синапса при повторной стимуляции — механизм памяти','Тип генетической мутации','Стадия сна'],ans:1,exp:'LTP: «нейроны, активирующиеся вместе, связываются вместе» (Хебб). Клеточный механизм памяти.'},
+  {q:'Ось HPA:',opts:['Гипоталамус → Поджелудочная → Артерии','Гипоталамус → Гипофиз → Надпочечники','Гиппокамп → Поджелудочная → Амигдала','Гипофиз → Печень → Амигдала'],ans:1,exp:'HPA: Гипоталамус (CRH) → Гипофиз (ACTH) → Надпочечники (кортизол). Главная ось стрессового ответа.'},
+  {q:'Что делает амигдала в контексте агрессии?',opts:['Тормозит импульсы','Реагирует на угрозу быстрее осознания','Вырабатывает кортизол','Управляет грамматикой'],ans:1,exp:'Амигдала реагирует за ~120 мс — до осознанного восприятия. Стимуляция → агрессия.'},
+  {q:'GxE взаимодействие означает:',opts:['Генетика и экология независимы','Нельзя предсказать эффект гена без знания среды','Ген определяет среду','Эволюция определяет генетику'],ans:1,exp:'Ген × Среда. Один ген в разных средах = разные результаты. MAOA + травма ≠ MAOA или травма отдельно.'},
+  {q:'Тестостерон и агрессия:',opts:['T напрямую вызывает агрессию','T — следствие доминирования, а не причина','T снижает агрессию','T не влияет на поведение'],ans:1,exp:'T повышает чувствительность к статусным угрозам. Растёт ПОСЛЕ победы. У болельщиков победившей команды тоже.'},
+  {q:'Эмерджентность — это:',opts:['Постепенное развитие','Системное свойство, которого нет ни у одного элемента','Генетическая мутация','Тип нейронной пластичности'],ans:1,exp:'Целое > сумма частей. Ни один нейрон не думает, но мозг думает. Ни один муравей не понимает архитектуры.'},
+  {q:'Какая структура критична для продукции речи?',opts:['Гиппокамп','Амигдала','Область Брока','Мозжечок'],ans:2,exp:'Область Брока (нижняя лобная доля, левое полушарие). Повреждение → афазия Брока: «телеграфная речь».'},
+  {q:'Нейроразвитийная модель шизофрении:',opts:['Шизофрения от вирусов','Нарушение пренатальной миграции нейронов → манифест при созревании ПФК','Чисто генетическое заболевание','Только от детского стресса'],ans:1,exp:'Нарушения пренатальные → скрытый дефект → проявляется когда зреет ПФК (18-25 лет). Объясняет поздний дебют.'}
+];
+let qState={i:0,score:0,done:false};
+function renderQuiz(){
+  const c=document.getElementById('quiz-container');
+  if(qState.i>=Q.length){
+    const p=Math.round(qState.score/Q.length*100);
+    const e=p>=80?'🏆':p>=60?'👍':'📚';
+    c.innerHTML=`<div class="quiz-score"><div style="font-size:40px">${e}</div><div class="score-num">${qState.score}/${Q.length}</div><div class="score-lbl">${p}% правильных ответов</div><br><button class="btn" onclick="qRestart()">↺ Пройти заново</button></div>`;
+    return;
+  }
+  const q=Q[qState.i];
+  const pct=(qState.i/Q.length*100)+'%';
+  c.innerHTML=`<div class="quiz-prog"><div class="quiz-prog-bar" style="width:${pct}"></div></div>
+    <div class="quiz-qnum">Вопрос ${qState.i+1} из ${Q.length}</div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-opts">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="qAns(${i})">${o}</button>`).join('')}</div>
+    <div class="quiz-exp" id="qexp">${q.exp}</div>
+    <button class="btn" id="qnext" style="display:none" onclick="qNext()">Следующий →</button>`;
+}
+function qAns(i){
+  const q=Q[qState.i];
+  const opts=document.querySelectorAll('.quiz-opt');
+  opts.forEach((o,idx)=>{o.classList.add('disabled');if(idx===q.ans)o.classList.add('correct');else if(idx===i)o.classList.add('wrong');});
+  if(i===q.ans)qState.score++;
+  document.getElementById('qexp').classList.add('show');
+  document.getElementById('qnext').style.display='block';
+}
+function qNext(){qState.i++;renderQuiz();}
+function qRestart(){qState={i:0,score:0,done:false};renderQuiz();}
+
+// FLASHCARDS
+let fcArr=[],fcIdx=0,fcKnown=0,fcUnknown=0,fcFlip=false;
+function buildFC(){
+  const all=[];
+  L.forEach(lec=>lec.terms.forEach(t=>all.push({n:t.n,d:t.d,ex:t.ex,num:lec.num,col:lec.col})));
+  fcArr=all.sort(()=>Math.random()-.5);
+  fcIdx=0;fcKnown=0;fcUnknown=0;showFC();
+}
+function showFC(){
+  fcFlip=false;
+  const card=document.getElementById('fc-card');
+  card.classList.remove('flip');
+  document.getElementById('fc-ctrl').style.display='none';
+  document.getElementById('fc-back').style.display='none';
+  if(fcIdx>=fcArr.length){
+    document.getElementById('fc-front').textContent='Готово! ✓';
+    document.getElementById('fc-front').style.color='var(--gold)';
+    document.getElementById('fc-side').textContent='Итог';
+    document.getElementById('fc-back').style.display='block';
+    document.getElementById('fc-back').textContent=`Знал: ${fcKnown} · Не знал: ${fcUnknown}`;
+    document.getElementById('fc-cnt').textContent=`Пройдено ${fcArr.length} карточек`;
+    return;
+  }
+  const t=fcArr[fcIdx];
+  document.getElementById('fc-side').textContent=`Лекция ${t.num} · Термин`;
+  document.getElementById('fc-front').textContent=t.n;
+  document.getElementById('fc-front').style.color='#fff';
+  document.getElementById('fc-back').textContent=t.d+(t.ex?' → '+t.ex:'');
+  document.getElementById('fc-cnt').textContent=`${fcIdx+1}/${fcArr.length} · ✓${fcKnown} ✗${fcUnknown}`;
+}
+function flipCard(){
+  if(fcIdx>=fcArr.length)return;
+  if(!fcFlip){
+    fcFlip=true;
+    document.getElementById('fc-card').classList.add('flip');
+    document.getElementById('fc-back').style.display='block';
+    document.getElementById('fc-front').style.color='var(--gold)';
+    document.getElementById('fc-ctrl').style.display='flex';
+  }
+}
+function fcAns(k){if(k)fcKnown++;else fcUnknown++;fcIdx++;showFC();}
+function fcRestart(){buildFC();}
+
+// NAV
+function showPage(id,tab){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  tab.classList.add('active');
+}
+
+// INIT
+const glossTerms=buildGloss();
+renderLectures(L);
+renderGloss(glossTerms);
+renderQuiz();
+buildFC();
+</script>
+</body>
+</html>
